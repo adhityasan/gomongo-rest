@@ -50,6 +50,7 @@ type Pii struct {
 	Provinsi          string               `schema:"PROVINSI,omitempty" bson:"provinsi,omitempty" json:"PROVINSI,omitempty"`
 	Agama             string               `schema:"AGAMA,omitempty" bson:"agama,omitempty" json:"AGAMA,omitempty"`
 	Pekerjaan         string               `schema:"PEKERJAAN,omitempty" bson:"pekerjaan,omitempty" json:"PEKERJAAN,omitempty"`
+	JenisKelamin      string               `schema:"JENIS_KELAMIN,omitempty" bson:"jenis_kelamin,omitempty" json:"JENIS_KELAMIN,omitempty"`
 	StatusPerkawinan  string               `schema:"STATUS_PERKAWINAN,omitempty" bson:"status_perkawinan,omitempty" json:"STATUS_PERKAWINAN,omitempty"`
 	FotoKTP           *piimage.ImageStruct `schema:"FOTO_KTP,omitempty" bson:"foto_ktp,omitempty" json:"FOTO_KTP,omitempty"`
 	FotoSelfie        *piimage.ImageStruct `schema:"FOTO_SELFIE,omitempty" bson:"foto_selfie,omitempty" json:"FOTO_SELFIE,omitempty"`
