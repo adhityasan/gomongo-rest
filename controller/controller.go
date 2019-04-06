@@ -10,9 +10,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/disintegration/gift"
 	"github.com/adhityasan/gomongo-rest/imagehandler"
 	"github.com/adhityasan/gomongo-rest/pii"
+	"github.com/adhityasan/gomongo-rest/pii/assigner"
+	"github.com/disintegration/gift"
 )
 
 // var cuttariImg = `{"url":"http://cdn2.tstatic.net/batam/foto/bank/images/cut-tari-artis-dan-pembawa-acara-televisi.jpg"}`
@@ -148,4 +149,24 @@ func DoOCR(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Write([]byte(fmt.Sprintln(err)))
 	}
+}
+
+// AssignFakePii to assign new fake data to Pii collection
+func AssignFakePii(w http.ResponseWriter, r *http.Request) {
+
+	var person pii.Pii
+
+	json.NewDecoder(r.Body).Decode(&person)
+	err := assigner.Assigner(person.Nik, &person)
+	if err != nil {
+		log.Println(err)
+	}
+
+	_, errSave := person.Save()
+	if errSave != nil {
+		log.Println(errSave)
+	}
+
+	res, _ := json.Marshal(person)
+	w.Write(res)
 }
