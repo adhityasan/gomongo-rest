@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -15,6 +16,23 @@ import (
 	"github.com/adhityasan/gomongo-rest/pii/assigner"
 	"github.com/disintegration/gift"
 )
+
+type controllerResp struct {
+	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
+}
+
+func writeRespByte(msg string, data interface{}) []byte {
+	var resp controllerResp
+	if len(msg) == 0 {
+		msg = "Success"
+	}
+	resp.Message = msg
+	resp.Data = data
+	res, _ := json.Marshal(resp)
+
+	return res
+}
 
 // var cuttariImg = `{"url":"http://cdn2.tstatic.net/batam/foto/bank/images/cut-tari-artis-dan-pembawa-acara-televisi.jpg"}`
 // var ersamayoriImg = `{"url":"https://cdns.klimg.com/kapanlagi.com/selebriti/Ersa_Mayori/p/ersa-mayori-025.jpg"}`
