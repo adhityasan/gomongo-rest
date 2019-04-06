@@ -85,14 +85,13 @@ func DecodeFormPost(r *http.Request) (*Pii, error) {
 	decoder := schema.NewDecoder()
 	decoder.IgnoreUnknownKeys(true)
 
-	if fd.Get("TANGGAL_LAHIR") != "" {
-		parsedtgllahir, errParse := time.Parse("2006-01-02", fd.Get("TANGGAL_LAHIR"))
-		if errParse != nil {
-			return nil, errors.New("Cannot parse tanggallahir decode")
-		}
-		tgllahirString := parsedtgllahir.String()
-		fd.Set("TANGGAL_LAHIR", tgllahirString)
+	parsedtgllahir, errParse := time.Parse("2006-01-02", fd.Get("TANGGAL_LAHIR"))
+	if errParse != nil {
+		return nil, errors.New("Cannot parse tanggallahir decode")
 	}
+
+	tgllahirString := parsedtgllahir.String()
+	fd.Set("tanggal_lahir", tgllahirString)
 
 	err := decoder.Decode(newPii, fd)
 
@@ -111,12 +110,8 @@ func DecodeFormPost(r *http.Request) (*Pii, error) {
 
 // Save current Personal Identifying Information
 func (p *Pii) Save() (interface{}, error) {
-
-	exist, err := p.Exist()
-	if exist {
-		fmt.Println("UDAH ADA!!")
-	}
-	ctx, cancel, client, _ := openConnection()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	client, _ := mongo.Connect(ctx, options.Client().ApplyURI(dburl))
 	collection := client.Database(dbname).Collection(dbcoll)
 	res, err := collection.InsertOne(ctx, p)
 	defer cancel()
@@ -125,47 +120,24 @@ func (p *Pii) Save() (interface{}, error) {
 		return nil, err
 	}
 
-	newid := &p.ID
-	*newid = res.InsertedID.(primitive.ObjectID)
+	id := res.InsertedID
 
-	return p.ID, nil
+	return id, nil
 }
 
 // Exist Check Pii data existance in local database
 func (p *Pii) Exist() (bool, error) {
-	_, cancel, client, _ := openConnection()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	client, _ := mongo.Connect(ctx, options.Client().ApplyURI(dburl))
 	collection := client.Database(dbname).Collection(dbcoll)
-	decodepoint := new(Pii)
-	err := collection.FindOne(context.TODO(), bson.M{"nik": p.Nik}).Decode(decodepoint)
+	a := new(Pii)
+	err := collection.FindOneAndReplace(context.TODO(), bson.M{"nik": p.Nik}, p).Decode(a)
 	defer cancel()
 
 	if err != nil {
 		return false, err
 	}
 
-	fmt.Printf("%v\n", decodepoint)
+	fmt.Printf("%v\n", a)
 	return true, nil
-}
-
-// GrepData gerp all pii data by it current _id or nik
-func (p *Pii) GrepData() error {
-	_, cancel, client, _ := openConnection()
-	collection := client.Database(dbname).Collection(dbcoll)
-	decodepoint := new(Pii)
-	err := collection.FindOne(context.TODO(), bson.M{"nik": p.Nik}).Decode(decodepoint)
-	defer cancel()
-
-	if err != nil {
-		fmt.Println("FindOne Result: ", decodepoint)
-		return err
-	}
-
-	fmt.Printf("%v\n", decodepoint)
-	return nil
-}
-
-func openConnection() (context.Context, context.CancelFunc, *mongo.Client, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dburl))
-	return ctx, cancel, client, err
 }
