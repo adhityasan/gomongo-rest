@@ -1,0 +1,7 @@
+vendor/
+_vendor-*
+*.exe
+gomongo-rest
+main
+*.note
+Config.toml
