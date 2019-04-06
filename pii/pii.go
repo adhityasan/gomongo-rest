@@ -26,20 +26,26 @@ var dbcoll = config.Of.DBModules["pii"].Coll
 
 // Pii stands for Personal Identifying Information
 type Pii struct {
-	ID                primitive.ObjectID   `schema:"_id,omitempty" bson:"_id,omitempty" json:"_id,omitempty"`
+	ID                primitive.ObjectID   `schema:"_id" bson:"_id,omitempty" json:"_id,omitempty"`
 	Nik               string               `schema:"NIK,omitempty" bson:"nik,omitempty" json:"NIK,omitempty"`
 	EktpStatus        bool                 `schema:"EKTP_STATUS,omitempty" bson:"ektp_status,omitempty" json:"EKTP_STATUS,omitempty"`
 	NamaLengkap       string               `schema:"NAMA_LENGKAP,omitempty" bson:"nama_lengkap,omitempty" json:"NAMA_LENGKAP,omitempty"`
-	NoHp              string               `schema:"NO_HP,omitempty" bson:"no_hp,omitempty" json:"NO_HP,omitempty"`
+	NamaLengkapIbu    string               `schema:"NAMA_LENGKAP_IBU,omitempty" bson:"nama_lengkap_ibu,omitempty" json:"NAMA_LENGKAP_IBU,omitempty"`
+	NoHp              string               `schema:"NOMOR_HANDPHONE,omitempty" bson:"nomor_handphone,omitempty" json:"NOMOR_HANDPHONE,omitempty"`
 	TanggalLahir      string               `schema:"TANGGAL_LAHIR,omitempty" bson:"tanggal_lahir,omitempty" json:"TANGGAL_LAHIR,omitempty"`
 	TempatLahir       string               `schema:"TEMPAT_LAHIR,omitempty" bson:"tempat_lahir,omitempty" json:"TEMPAT_LAHIR,omitempty"`
 	PendidikanAkhir   string               `schema:"PENDIDIKAN_AKHIR,omitempty" bson:"pendidikan_akhir,omitempty" json:"PENDIDIKAN_AKHIR,omitempty"`
-	NoKK              string               `schema:"NO_KK,omitempty" bson:"no_kk,omitempty" json:"NO_KK,omitempty"`
+	NoKK              string               `schema:"NOMOR_KARTU_KELUARGA,omitempty" bson:"nomor_kartu_keluarga,omitempty" json:"NOMOR_KARTU_KELUARGA,omitempty"`
 	Alamat            string               `schema:"ALAMAT,omitempty" bson:"alamat,omitempty" json:"ALAMAT,omitempty"`
 	Rt                string               `schema:"RT,omitempty" bson:"rt,omitempty" json:"RT,omitempty"`
 	Rw                string               `schema:"RW,omitempty" bson:"rw,omitempty" json:"RW,omitempty"`
+	NomorKelurahan    string               `schema:"NOMOR_KELURAHAN,omitempty" bson:"nomor_kelurahan,omitempty" json:"NOMOR_KELURAHAN,omitempty"`
+	Kelurahan         string               `schema:"KELURAHAN,omitempty" bson:"kelurahan,omitempty" json:"KELURAHAN,omitempty"`
+	NomorKecamatan    string               `schema:"NOMOR_KECAMATAN,omitempty" bson:"nomor_kecamatan,omitempty" json:"NOMOR_KECAMATAN,omitempty"`
 	Kecamatan         string               `schema:"KECAMATAN,omitempty" bson:"kecamatan,omitempty" json:"KECAMATAN,omitempty"`
+	NomorKabupaten    string               `schema:"NOMOR_KABUPATEN,omitempty" bson:"nomor_kabupaten,omitempty" json:"NOMOR_KABUPATEN,omitempty"`
 	Kabupaten         string               `schema:"KABUPATEN,omitempty" bson:"kabupaten,omitempty" json:"KABUPATEN,omitempty"`
+	NomorProvinsi     string               `schema:"NOMOR_PROVINSI,omitempty" bson:"nomor_provinsi,omitempty" json:"NOMOR_PROVINSI,omitempty"`
 	Provinsi          string               `schema:"PROVINSI,omitempty" bson:"provinsi,omitempty" json:"PROVINSI,omitempty"`
 	Agama             string               `schema:"AGAMA,omitempty" bson:"agama,omitempty" json:"AGAMA,omitempty"`
 	Pekerjaan         string               `schema:"PEKERJAAN,omitempty" bson:"pekerjaan,omitempty" json:"PEKERJAAN,omitempty"`
