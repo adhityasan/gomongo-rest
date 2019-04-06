@@ -105,12 +105,12 @@ func DecodeFormPost(r *http.Request) (*Pii, error) {
 // Save current Personal Identifying Information
 func (p *Pii) Save() (interface{}, error) {
 
-	exist, err := p.Exist()
+	exist, _ := p.Exist()
 	if exist {
-		fmt.Println("UDAH ADA!!")
+		return nil, errors.New("Pii data exist, Pii.ID has been set")
 	}
-	ctx, cancel, client, _ := openConnection()
-	collection := client.Database(dbname).Collection(dbcoll)
+
+	ctx, cancel, _, collection, _ := openPiiCollection()
 	res, err := collection.InsertOne(ctx, p)
 	defer cancel()
 
