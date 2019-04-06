@@ -56,23 +56,16 @@ type Pii struct {
 	PasfotoKTP        *piimage.ImageStruct `schema:"PASFOTO_KTP,omitempty" bson:"pasfoto_ktp,omitempty" json:"PASFOTO_KTP,omitempty"`
 }
 
-// GetLocalPii func to get Personal Information based on given nik (param)
-// return (Pii, nil) Struct , and (nil, error) if data is not exist or somethong went wrong
-func GetLocalPii(nik string) {
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	client, _ := mongo.Connect(ctx, options.Client().ApplyURI(dburl))
+func openPiiCollection() (context.Context, context.CancelFunc, *mongo.Client, *mongo.Collection, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dburl))
 	collection := client.Database(dbname).Collection(dbcoll)
-	cursor, _ := collection.Find(ctx, bson.M{"nik": nik})
 
-	defer cursor.Close(ctx)
-	for cursor.Next(ctx) {
-		var person Pii
-		cursor.Decode(&person)
-		fmt.Println("nik : ", person.Nik)
+	if err != nil {
+		log.Println(err)
 	}
 
+	return ctx, cancel, client, collection, err
 }
 
 // DecodeFormPost decode the formPost data in requests form-data and assign it to Pii Struct
