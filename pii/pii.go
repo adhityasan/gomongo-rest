@@ -142,3 +142,26 @@ func (p *Pii) Exist() (bool, error) {
 	fmt.Printf("%v\n", a)
 	return true, nil
 }
+
+// GrepData gerp all pii data by it current _id or nik
+func (p *Pii) GrepData() error {
+	_, cancel, client, _ := openConnection()
+	collection := client.Database(dbname).Collection(dbcoll)
+	decodepoint := new(Pii)
+	err := collection.FindOne(context.TODO(), bson.M{"nik": p.Nik}).Decode(decodepoint)
+	defer cancel()
+
+	if err != nil {
+		fmt.Println("FindOne Result: ", decodepoint)
+		return err
+	}
+
+	fmt.Printf("%v\n", decodepoint)
+	return nil
+}
+
+func openConnection() (context.Context, context.CancelFunc, *mongo.Client, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dburl))
+	return ctx, cancel, client, err
+}
