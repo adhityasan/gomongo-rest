@@ -85,13 +85,14 @@ func DecodeFormPost(r *http.Request) (*Pii, error) {
 	decoder := schema.NewDecoder()
 	decoder.IgnoreUnknownKeys(true)
 
+	if fd.Get("TANGGAL_LAHIR") != "" {
 	parsedtgllahir, errParse := time.Parse("2006-01-02", fd.Get("TANGGAL_LAHIR"))
 	if errParse != nil {
 		return nil, errors.New("Cannot parse tanggallahir decode")
 	}
-
 	tgllahirString := parsedtgllahir.String()
-	fd.Set("tanggal_lahir", tgllahirString)
+		fd.Set("TANGGAL_LAHIR", tgllahirString)
+	}
 
 	err := decoder.Decode(newPii, fd)
 
