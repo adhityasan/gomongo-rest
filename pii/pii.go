@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -144,23 +145,15 @@ func (p *Pii) Exist() (bool, error) {
 
 // GrepData gerp all pii data by it current _id or nik
 func (p *Pii) GrepData() error {
-	_, cancel, client, _ := openConnection()
-	collection := client.Database(dbname).Collection(dbcoll)
+	_, cancel, _, collection, _ := openPiiCollection()
 	decodepoint := new(Pii)
 	err := collection.FindOne(context.TODO(), bson.M{"nik": p.Nik}).Decode(decodepoint)
 	defer cancel()
 
 	if err != nil {
-		fmt.Println("FindOne Result: ", decodepoint)
 		return err
 	}
 
 	fmt.Printf("%v\n", decodepoint)
 	return nil
-}
-
-func openConnection() (context.Context, context.CancelFunc, *mongo.Client, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dburl))
-	return ctx, cancel, client, err
 }
