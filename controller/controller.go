@@ -3,7 +3,6 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -176,7 +175,6 @@ func AssignFakePii(response http.ResponseWriter, request *http.Request) {
 
 	json.NewDecoder(request.Body).Decode(&person)
 	err := assigner.Assigner(person.Nik, &person)
-	err = errors.New("testing")
 	if err != nil {
 		log.Println(err)
 		response.Write(writeRespByte(err.Error(), person))
