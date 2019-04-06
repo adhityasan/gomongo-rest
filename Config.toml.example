@@ -1,0 +1,35 @@
+[app]
+name = "gomongo-rest"
+hostname = "0.0.0.0"
+port = "8000"
+src = "https://github.com/adhityasan/gomongo-rest"
+
+[owner]
+name = "adhityasan"
+
+[mongoconnection]
+hostname = "localhost"
+port = "27017"
+enabled = true
+user = ""
+password = ""
+url = "mongodb://localhost:27017"
+
+[dbmodules]
+  [dbmodules.pii]
+  database = ""
+  collection = ""
+
+[dukcapil]
+endpoint = ""
+port = ""
+key = ""
+
+[aws]
+region = "" #"ap-northeast-2"
+keyid = ""
+secretkey = ""
+
+[azure]
+endpoint = ""
+key = ""
