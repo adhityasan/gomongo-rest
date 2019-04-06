@@ -170,21 +170,25 @@ func DoOCR(w http.ResponseWriter, r *http.Request) {
 }
 
 // AssignFakePii to assign new fake data to Pii collection
-func AssignFakePii(w http.ResponseWriter, r *http.Request) {
+func AssignFakePii(response http.ResponseWriter, request *http.Request) {
 
 	var person pii.Pii
 
-	json.NewDecoder(r.Body).Decode(&person)
+	json.NewDecoder(request.Body).Decode(&person)
 	err := assigner.Assigner(person.Nik, &person)
+	err = errors.New("testing")
 	if err != nil {
 		log.Println(err)
+		response.Write(writeRespByte(err.Error(), person))
+		return
 	}
 
 	_, errSave := person.Save()
 	if errSave != nil {
 		log.Println(errSave)
+		response.Write(writeRespByte(errSave.Error(), person))
+		return
 	}
 
-	res, _ := json.Marshal(person)
-	w.Write(res)
+	response.Write(writeRespByte("", person))
 }
