@@ -13,6 +13,7 @@ type tomlConfig struct {
 	Azure     azure
 	Aws       aws
 	App       app
+	Dukcapil  dukcapil
 }
 
 type app struct {
@@ -42,7 +43,6 @@ type dbmodule struct {
 
 type dukcapil struct {
 	Endpoint string
-	Port     string
 	key      string
 }
 

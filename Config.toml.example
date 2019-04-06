@@ -22,7 +22,6 @@ url = "mongodb://localhost:27017"
 
 [dukcapil]
 endpoint = ""
-port = ""
 key = ""
 
 [aws]
