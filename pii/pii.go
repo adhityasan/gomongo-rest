@@ -126,15 +126,18 @@ func (p *Pii) Save() (interface{}, error) {
 
 // Exist Check Pii data existance in local database
 func (p *Pii) Exist() (bool, error) {
-	_, cancel, client, _ := openConnection()
-	collection := client.Database(dbname).Collection(dbcoll)
+	_, cancel, _, collection, _ := openPiiCollection()
 	decodepoint := new(Pii)
 	err := collection.FindOne(context.TODO(), bson.M{"nik": p.Nik}).Decode(decodepoint)
 	defer cancel()
 
 	if err != nil {
+		log.Println(err)
 		return false, err
 	}
+
+	pointerID := &p.ID
+	*pointerID = decodepoint.ID
 
 	return true, nil
 }
